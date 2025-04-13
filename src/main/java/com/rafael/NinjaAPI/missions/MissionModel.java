@@ -2,6 +2,9 @@ package com.rafael.NinjaAPI.missions;
 
 import com.rafael.NinjaAPI.ninjas.NinjaModel;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +12,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tb_mission")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MissionModel {
 
     @Id
@@ -23,31 +29,4 @@ public class MissionModel {
     @OneToMany(mappedBy = "mission")
     private List<NinjaModel> ninjas;
 
-    public MissionModel() {
-    }
-
-    public MissionModel(String name, String difficulty) {
-        this.name = name;
-        this.difficulty = difficulty;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
-    }
 }
