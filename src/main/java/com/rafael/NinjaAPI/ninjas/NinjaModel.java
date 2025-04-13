@@ -1,8 +1,10 @@
-package com.rafael.NinjaAPI.model;
+package com.rafael.NinjaAPI.ninjas;
 
+import com.rafael.NinjaAPI.missions.MissionModel;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 //Entity transformar a classe em uma entidade do DB
 @Entity
@@ -15,6 +17,11 @@ public class NinjaModel {
     private String name;
     private String email;
     private int age;
+
+    //@ManyToOne um ninja tem uma unica missão
+    @ManyToOne
+    @JoinColumn(name = "mission_id") //Foreign Key
+    private MissionModel mission;
 
     public NinjaModel() {
     }
