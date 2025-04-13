@@ -1,6 +1,8 @@
-package com.rafael.NinjaAPI;
+package com.rafael.NinjaAPI.model;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 
 //Entity transformar a classe em uma entidade do DB
 @Entity
