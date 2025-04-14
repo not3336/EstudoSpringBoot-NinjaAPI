@@ -1,5 +1,6 @@
 package com.rafael.NinjaAPI.missions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rafael.NinjaAPI.ninjas.NinjaModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class MissionModel {
     private String difficulty;
 
     //@OneToMany Uma missão pode ter varios ninjas
+    @JsonIgnore
     @OneToMany(mappedBy = "mission")
     private List<NinjaModel> ninjas;
 
