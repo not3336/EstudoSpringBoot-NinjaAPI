@@ -34,7 +34,7 @@ public class MissionService {
         }
         MissionModel mission = exists.get();
         mission.setName(updateMission.getName());
-        mission.setDifficulty(updateMission.getDifficulty());
+        mission.setDescription(updateMission.getDescription());
 
         return  missionRepository.save(mission);
 

@@ -24,8 +24,11 @@ public class MissionModel {
 
     private String name;
 
-    private String difficulty;
+    @Column(name = "description")
+    private String description;
 
+    @Column(name = "rank")
+    private MissionRank rank;
     //@OneToMany Uma missão pode ter varios ninjas
     @JsonIgnore
     @OneToMany(mappedBy = "mission")

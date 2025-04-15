@@ -25,17 +25,17 @@ public class NinjaService {
     }
 
     public NinjaModel save(NinjaDto ninjaDto) throws MissionNotFoundException, EmailAlreadyExistsException {
-        var exists = ninjaRepository.findByEmail(ninjaDto.getEmail());
+        var exists = ninjaRepository.findByEmail(ninjaDto.email());
         if (exists.isPresent()){
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
-        MissionModel mission = missionService.findById(ninjaDto.getMissionId());
+        MissionModel mission = missionService.findById(ninjaDto.missionId());
         NinjaModel ninja = new NinjaModel();
-        ninja.setName(ninjaDto.getName());
-        ninja.setEmail(ninjaDto.getEmail());
-        ninja.setImgUrl(ninjaDto.getImgUrl());
-        ninja.setAge(ninjaDto.getAge());
-        ninja.setRank(ninjaDto.getRank());
+        ninja.setName(ninjaDto.name());
+        ninja.setEmail(ninjaDto.email());
+        ninja.setImgUrl(ninjaDto.imgUrl());
+        ninja.setAge(ninjaDto.age());
+        ninja.setRank(ninjaDto.rank());
         ninja.setMission(mission);
         return ninjaRepository.save(ninja);
     }
@@ -53,17 +53,17 @@ public class NinjaService {
         if (exists.isEmpty()){
             throw new NinjaNotFoundExecption("Ninja with ID " + id + " Not Found");
         }
-        MissionModel mission = missionService.findById(updateNinja.getMissionId());
+        MissionModel mission = missionService.findById(updateNinja.missionId());
         NinjaModel ninja = exists.get();
-        if (!updateNinja.getEmail().equals(ninja.getEmail()) && ninjaRepository.findByEmail(updateNinja.getEmail()).isPresent()){
+        if (!updateNinja.email().equals(ninja.getEmail()) && ninjaRepository.findByEmail(updateNinja.email()).isPresent()){
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
 
-        ninja.setName(updateNinja.getName());
-        ninja.setEmail(updateNinja.getEmail());
-        ninja.setImgUrl(updateNinja.getImgUrl());
-        ninja.setAge(updateNinja.getAge());
-        ninja.setRank(updateNinja.getRank());
+        ninja.setName(updateNinja.name());
+        ninja.setEmail(updateNinja.email());
+        ninja.setImgUrl(updateNinja.imgUrl());
+        ninja.setAge(updateNinja.age());
+        ninja.setRank(updateNinja.rank());
         ninja.setMission(mission);
         return ninjaRepository.save(ninja);
     }

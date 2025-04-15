@@ -27,7 +27,7 @@ public class NinjaModel {
     private int age;
 
     @Column(name = "rank")
-    private String rank;
+    private NinjaRank rank;
 
     //@ManyToOne um ninja tem uma unica missão
     @ManyToOne

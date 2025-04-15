@@ -1,18 +1,12 @@
 package com.rafael.NinjaAPI.ninjas;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class NinjaDto {
-    private String name;
-    private String email;
-    private String imgUrl;
-    private int age;
-    private String rank;
-    private Long missionId;
-
+public record NinjaDto (String name, String email, String imgUrl, int age, NinjaRank rank, Long missionId) {
+    public NinjaDto(String name, String email, String imgUrl, int age, NinjaRank rank, Long missionId) {
+        this.name = name;
+        this.email = email;
+        this.imgUrl = imgUrl;
+        this.age = age;
+        this.rank = rank;
+        this.missionId = missionId;
+    }
 }
