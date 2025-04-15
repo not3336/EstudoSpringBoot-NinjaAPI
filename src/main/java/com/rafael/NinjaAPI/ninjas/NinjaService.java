@@ -1,15 +1,13 @@
 package com.rafael.NinjaAPI.ninjas;
 
 import com.rafael.NinjaAPI.missions.MissionModel;
-import com.rafael.NinjaAPI.missions.MissionRepository;
 import com.rafael.NinjaAPI.missions.MissionService;
+import com.rafael.NinjaAPI.missions.exceptions.MissionNotFoundException;
 import com.rafael.NinjaAPI.ninjas.exceptions.EmailAlreadyExistsException;
 import com.rafael.NinjaAPI.ninjas.exceptions.NinjaNotFoundExecption;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NinjaService {
@@ -26,6 +24,22 @@ public class NinjaService {
         return ninjaRepository.findAll();
     }
 
+    public NinjaModel save(NinjaDto ninjaDto) throws MissionNotFoundException, EmailAlreadyExistsException {
+        var exists = ninjaRepository.findByEmail(ninjaDto.getEmail());
+        if (exists.isPresent()){
+            throw new EmailAlreadyExistsException("there is already a ninja with this email");
+        }
+        MissionModel mission = missionService.findById(ninjaDto.getMissionId());
+        NinjaModel ninja = new NinjaModel();
+        ninja.setName(ninjaDto.getName());
+        ninja.setEmail(ninjaDto.getEmail());
+        ninja.setImgUrl(ninjaDto.getImgUrl());
+        ninja.setAge(ninjaDto.getAge());
+        ninja.setRank(ninjaDto.getRank());
+        ninja.setMission(mission);
+        return ninjaRepository.save(ninja);
+    }
+
     public NinjaModel findById(Long id) throws NinjaNotFoundExecption{
         var exists = ninjaRepository.findById(id);
         if (exists.isEmpty()){
@@ -34,32 +48,23 @@ public class NinjaService {
         return exists.get();
     }
 
-    public NinjaModel save(Map<String, String> request){
-        MissionModel mission = missionService.findById(Long.parseLong(request.get("mission_id")));
-        NinjaModel ninja = new NinjaModel(
-                null,
-                request.get("name"),
-                request.get("email"),
-                request.get("img_url"),
-                Integer.parseInt(request.get("age")),
-                request.get("rank"),
-                mission);
-        return ninjaRepository.save(ninja);
-    }
-
-    public NinjaModel update(Long id, Map<String, String> request){
+    public NinjaModel update(Long id, NinjaDto updateNinja) throws NinjaNotFoundExecption, MissionNotFoundException{
         var exists = ninjaRepository.findById(id);
         if (exists.isEmpty()){
             throw new NinjaNotFoundExecption("Ninja with ID " + id + " Not Found");
         }
-        if (ninjaRepository.findByEmail(request.get("email")).isPresent()){
+        MissionModel mission = missionService.findById(updateNinja.getMissionId());
+        NinjaModel ninja = exists.get();
+        if (!updateNinja.getEmail().equals(ninja.getEmail()) && ninjaRepository.findByEmail(updateNinja.getEmail()).isPresent()){
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
-        NinjaModel ninja = exists.get();
-        ninja.setName(request.get("name"));
-        ninja.setEmail(request.get("email"));
-        ninja.setAge(Integer.parseInt(request.get("age")));
-        ninja.setRank(request.get("rank"));
+
+        ninja.setName(updateNinja.getName());
+        ninja.setEmail(updateNinja.getEmail());
+        ninja.setImgUrl(updateNinja.getImgUrl());
+        ninja.setAge(updateNinja.getAge());
+        ninja.setRank(updateNinja.getRank());
+        ninja.setMission(mission);
         return ninjaRepository.save(ninja);
     }
 
