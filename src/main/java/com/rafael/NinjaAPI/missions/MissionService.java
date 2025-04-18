@@ -36,6 +36,7 @@ public class MissionService {
         missionRepository.findById(id)
                 .orElseThrow(()-> new MissionNotFoundException("Mission with ID " + id + " not found"));
         MissionModel mission = missionMapper.map(updateMissionDto);
+        mission.setId(id);
         return missionMapper.map(missionRepository.save(mission));
 
     }

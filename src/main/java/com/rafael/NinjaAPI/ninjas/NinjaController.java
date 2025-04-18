@@ -1,6 +1,7 @@
 package com.rafael.NinjaAPI.ninjas;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,10 @@ public class NinjaController {
     }
 
     @PostMapping()
-    public ResponseEntity<NinjaDto> register(@RequestBody NinjaDto ninjaDto){
-        return ResponseEntity.ok(ninjaService.save(ninjaDto));
+    public ResponseEntity<String> register(@RequestBody NinjaDto ninjaDto){
+        NinjaDto ninja = ninjaService.save(ninjaDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Successfully created ninja: \nName: " + ninja.getName() + "\nID: " + ninja.getId());
     }
 
     @PutMapping("/{id}")
@@ -33,9 +36,8 @@ public class NinjaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<String> delete(@PathVariable Long id){
         ninjaService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Ninja with ID " + id + " deleted successfully");
     }
-
 }
