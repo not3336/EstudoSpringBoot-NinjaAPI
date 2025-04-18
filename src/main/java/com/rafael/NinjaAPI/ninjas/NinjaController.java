@@ -13,22 +13,22 @@ public class NinjaController {
     private NinjaService ninjaService;
 
     @GetMapping()
-    public ResponseEntity<List<NinjaModel>> findALl(){
+    public ResponseEntity<List<NinjaDto>> findALl(){
         return ResponseEntity.ok(ninjaService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NinjaModel> findById(@PathVariable Long id){
+    public ResponseEntity<NinjaDto> findById(@PathVariable Long id){
         return ResponseEntity.ok(ninjaService.findById(id));
     }
 
     @PostMapping()
-    public ResponseEntity<NinjaModel> register(@RequestBody NinjaDto ninjaDto){
+    public ResponseEntity<NinjaDto> register(@RequestBody NinjaDto ninjaDto){
         return ResponseEntity.ok(ninjaService.save(ninjaDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NinjaModel> update(@PathVariable Long id, @RequestBody NinjaDto updateNinja){
+    public ResponseEntity<NinjaDto> update(@PathVariable Long id, @RequestBody NinjaDto updateNinja){
         return ResponseEntity.ok(ninjaService.update(id, updateNinja));
     }
 

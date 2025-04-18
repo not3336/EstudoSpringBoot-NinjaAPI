@@ -16,21 +16,21 @@ public class MissionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MissionModel>> findAll(){
+    public ResponseEntity<List<MissionDto>> findAll(){
         return ResponseEntity.ok(missionService.findAll());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<MissionModel> findById(@PathVariable Long id){
+    public ResponseEntity<MissionDto> findById(@PathVariable Long id){
         return ResponseEntity.ok(missionService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<MissionModel> register(@RequestBody MissionDto missionDto){
+    public ResponseEntity<MissionDto> register(@RequestBody MissionDto missionDto){
         return ResponseEntity.ok(missionService.save(missionDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MissionModel> update(@PathVariable Long id, @RequestBody MissionDto updateMissionDto){
+    public ResponseEntity<MissionDto> update(@PathVariable Long id, @RequestBody MissionDto updateMissionDto){
         return ResponseEntity.ok(missionService.update(id, updateMissionDto));
     }
 
