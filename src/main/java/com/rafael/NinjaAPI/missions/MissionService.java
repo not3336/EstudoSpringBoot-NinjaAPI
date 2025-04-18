@@ -26,7 +26,7 @@ public class MissionService {
         mission.setName(missionDto.name());
         mission.setDescription(missionDto.description());
         try{
-            mission.setRank(MissionRank.valueOf(missionDto.rank()));
+            mission.setRank(MissionRank.valueOf(missionDto.rank().toUpperCase()));
         }catch (IllegalArgumentException e){
             throw new MissionRankNotFoundException("Rank with name " + missionDto.rank() + " not found");
         }
@@ -40,7 +40,7 @@ public class MissionService {
         mission.setName(updateMissionDto.name());
         mission.setDescription(updateMissionDto.description());
         try{
-            mission.setRank(MissionRank.valueOf(String.valueOf(updateMissionDto.rank())));
+            mission.setRank(MissionRank.valueOf(String.valueOf(updateMissionDto.rank().toUpperCase())));
         }catch (IllegalArgumentException e){
             throw new MissionRankNotFoundException("Rank with name " + updateMissionDto.rank() + " not found");
         }

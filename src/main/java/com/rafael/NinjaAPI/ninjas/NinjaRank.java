@@ -1,23 +1,21 @@
 package com.rafael.NinjaAPI.ninjas;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum NinjaRank {
-    GENNIN(1),
-    CHUNNIN(2),
-    JONNIN(3),
-    ANBU(4),
-    KAGE(5),
-    SANNIN(6),
-    NUKENNIN(7),
-    OININ(8)
+    GENNIN(0),
+    CHUNNIN(1),
+    JONNIN(2),
+    ANBU(3),
+    KAGE(4),
+    SANNIN(5),
+    NUKENNIN(6),
+    OININ(7)
     ;
 
-    private NinjaRank(int rankId){
-        this.rankId = rankId;
-    }
+    private final int rank;
 
-    private final int rankId;
-
-    public int getRankId() {
-        return rankId;
-    }
 }
