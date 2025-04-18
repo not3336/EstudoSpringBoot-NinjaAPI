@@ -9,42 +9,34 @@ import java.util.List;
 
 @Service
 public class MissionService {
-    @Autowired
-    private MissionRepository missionRepository;
+    private final MissionRepository missionRepository;
+    private final MissionMapper missionMapper;
 
-    public List<MissionModel> findAll(){
-        return missionRepository.findAll();
+    public MissionService(MissionRepository missionRepository, MissionMapper missionMapper) {
+        this.missionRepository = missionRepository;
+        this.missionMapper = missionMapper;
     }
 
-    public MissionModel findById(Long id) throws MissionNotFoundException{
-        return missionRepository.findById(id)
-                .orElseThrow(() -> new MissionNotFoundException("Mission with ID " + id + " not found"));
+    public List<MissionDto> findAll(){
+        return missionRepository.findAll().stream().map(missionMapper::map).toList();
     }
 
-    public MissionModel save(MissionDto missionDto) throws MissionRankNotFoundException{
-        MissionModel mission = new MissionModel();
-        mission.setName(missionDto.name());
-        mission.setDescription(missionDto.description());
-        try{
-            mission.setRank(MissionRank.valueOf(missionDto.rank().toUpperCase()));
-        }catch (IllegalArgumentException e){
-            throw new MissionRankNotFoundException("Rank with name " + missionDto.rank() + " not found");
-        }
-        return missionRepository.save(mission);
+    public MissionDto findById(Long id) throws MissionNotFoundException{
+        return missionMapper.map(
+                missionRepository.findById(id)
+                        .orElseThrow(() -> new MissionNotFoundException("Mission with ID " + id + " not found"))
+        );
     }
 
-    public MissionModel update(Long id, MissionDto updateMissionDto) throws MissionNotFoundException, MissionRankNotFoundException{
-        MissionModel mission = missionRepository.findById(id)
+    public MissionDto save(MissionDto missionDto) throws MissionRankNotFoundException{
+        return missionMapper.map(missionRepository.save(missionMapper.map(missionDto)));
+    }
+
+    public MissionDto update(Long id, MissionDto updateMissionDto) throws MissionNotFoundException, MissionRankNotFoundException{
+        missionRepository.findById(id)
                 .orElseThrow(()-> new MissionNotFoundException("Mission with ID " + id + " not found"));
-
-        mission.setName(updateMissionDto.name());
-        mission.setDescription(updateMissionDto.description());
-        try{
-            mission.setRank(MissionRank.valueOf(String.valueOf(updateMissionDto.rank().toUpperCase())));
-        }catch (IllegalArgumentException e){
-            throw new MissionRankNotFoundException("Rank with name " + updateMissionDto.rank() + " not found");
-        }
-        return  missionRepository.save(mission);
+        MissionModel mission = missionMapper.map(updateMissionDto);
+        return missionMapper.map(missionRepository.save(mission));
 
     }
 

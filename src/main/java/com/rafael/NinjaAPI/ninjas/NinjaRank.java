@@ -1,11 +1,12 @@
 package com.rafael.NinjaAPI.ninjas;
 
+import com.rafael.NinjaAPI.ninjas.exceptions.NinjaRankNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum NinjaRank {
+public enum NinjaRank{
     GENNIN(0),
     CHUNNIN(1),
     JONNIN(2),

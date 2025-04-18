@@ -14,66 +14,42 @@ import java.util.List;
 public class NinjaService {
 
     private final NinjaRepository ninjaRepository;
-    private final MissionService missionService;
+    private final NinjaMapper ninjaMapper;
 
-    public NinjaService(NinjaRepository ninjaRepository, MissionService missionService) {
+    public NinjaService(NinjaRepository ninjaRepository, NinjaMapper ninjaMapper) {
         this.ninjaRepository = ninjaRepository;
-        this.missionService = missionService;
+        this.ninjaMapper = ninjaMapper;
     }
 
-    public List<NinjaModel> findAll(){
-        return ninjaRepository.findAll();
+    public List<NinjaDto> findAll(){
+        return ninjaRepository.findAll().stream().map(ninjaMapper::map).toList();
     }
 
-    public NinjaModel save(NinjaDto ninjaDto) throws MissionNotFoundException, EmailAlreadyExistsException, NinjaRankNotFoundException {
-        var exists = ninjaRepository.findByEmail(ninjaDto.email());
+    public NinjaDto save(NinjaDto ninjaDto) throws MissionNotFoundException, EmailAlreadyExistsException, NinjaRankNotFoundException {
+        var exists = ninjaRepository.findByEmail(ninjaDto.getEmail());
         if (exists.isPresent()){
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
-        MissionModel mission = missionService.findById(ninjaDto.missionId());
-        NinjaModel ninja = new NinjaModel();
-        ninja.setName(ninjaDto.name());
-        ninja.setEmail(ninjaDto.email());
-        ninja.setImgUrl(ninjaDto.imgUrl());
-        ninja.setAge(ninjaDto.age());
-        try{
-            ninja.setRank(NinjaRank.valueOf(ninjaDto.rank().toUpperCase()));
-        }catch (IllegalArgumentException e){
-            throw new NinjaRankNotFoundException("Rank " + ninjaDto.rank() + " not found");
-        }
-        ninja.setMission(mission);
-        return ninjaRepository.save(ninja);
+        return ninjaMapper.map(ninjaRepository.save(ninjaMapper.map(ninjaDto)));
     }
 
-    public NinjaModel findById(Long id) throws NinjaNotFoundExecption{
-        var exists = ninjaRepository.findById(id);
-        if (exists.isEmpty()){
-            throw new NinjaNotFoundExecption("Ninja with ID " + id + " Not Found");
-        }
-        return exists.get();
+    public NinjaDto findById(Long id) throws NinjaNotFoundExecption{
+        NinjaModel ninja = ninjaRepository.findById(id)
+                .orElseThrow(() -> new NinjaNotFoundExecption("Ninja with ID " + id + " Not Found"));
+        return ninjaMapper.map(ninja);
     }
 
-    public NinjaModel update(Long id, NinjaDto updateNinjaDto)
+    public NinjaDto update(Long id, NinjaDto updateNinjaDto)
             throws NinjaNotFoundExecption, MissionNotFoundException, EmailAlreadyExistsException{
         NinjaModel ninja = ninjaRepository.findById(id)
                 .orElseThrow(()->new NinjaNotFoundExecption("Ninja with ID " + id + " Not Found"));
-        MissionModel mission = missionService.findById(updateNinjaDto.missionId());
 
-        if (!updateNinjaDto.email().equals(ninja.getEmail()) && ninjaRepository.findByEmail(updateNinjaDto.email()).isPresent()){
+        if (!updateNinjaDto.getEmail().equals(ninja.getEmail()) && ninjaRepository.findByEmail(updateNinjaDto.getEmail()).isPresent()){
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
 
-        ninja.setName(updateNinjaDto.name());
-        ninja.setEmail(updateNinjaDto.email());
-        ninja.setImgUrl(updateNinjaDto.imgUrl());
-        ninja.setAge(updateNinjaDto.age());
-        try{
-            ninja.setRank(NinjaRank.valueOf(updateNinjaDto.rank().toUpperCase()));
-        }catch (IllegalArgumentException e){
-            throw new NinjaRankNotFoundException("Rank " + updateNinjaDto.rank() + " not found");
-        }
-        ninja.setMission(mission);
-        return ninjaRepository.save(ninja);
+
+        return ninjaMapper.map(ninjaRepository.save(ninjaMapper.map(updateNinjaDto)));
     }
 
     public void delete(Long id){
