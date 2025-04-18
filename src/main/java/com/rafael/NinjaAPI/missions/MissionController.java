@@ -1,7 +1,5 @@
 package com.rafael.NinjaAPI.missions;
 
-import com.rafael.NinjaAPI.ninjas.NinjaModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,13 +25,13 @@ public class MissionController {
     }
 
     @PostMapping
-    public ResponseEntity<MissionModel> register(@RequestBody MissionModel mission){
-        return ResponseEntity.ok(missionService.save(mission));
+    public ResponseEntity<MissionModel> register(@RequestBody MissionDto missionDto){
+        return ResponseEntity.ok(missionService.save(missionDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MissionModel> update(@PathVariable Long id, @RequestBody MissionModel updateMission){
-        return ResponseEntity.ok(missionService.update(id, updateMission));
+    public ResponseEntity<MissionModel> update(@PathVariable Long id, @RequestBody MissionDto updateMissionDto){
+        return ResponseEntity.ok(missionService.update(id, updateMissionDto));
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.rafael.NinjaAPI.missions;
 
 import com.rafael.NinjaAPI.missions.exceptions.MissionNotFoundException;
+import com.rafael.NinjaAPI.missions.exceptions.MissionRankNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,35 +17,40 @@ public class MissionService {
     }
 
     public MissionModel findById(Long id) throws MissionNotFoundException{
-        var exists = missionRepository.findById(id);
-        if (exists.isEmpty()){
-            throw new MissionNotFoundException("Mission with ID " + id + " not found");
-        }
-        return exists.get();
+        return missionRepository.findById(id)
+                .orElseThrow(() -> new MissionNotFoundException("Mission with ID " + id + " not found"));
     }
 
-    public MissionModel save(MissionModel mission){
+    public MissionModel save(MissionDto missionDto) throws MissionRankNotFoundException{
+        MissionModel mission = new MissionModel();
+        mission.setName(missionDto.name());
+        mission.setDescription(missionDto.description());
+        try{
+            mission.setRank(MissionRank.valueOf(missionDto.rank()));
+        }catch (IllegalArgumentException e){
+            throw new MissionRankNotFoundException("Rank with name " + missionDto.rank() + " not found");
+        }
         return missionRepository.save(mission);
     }
 
-    public MissionModel update(Long id, MissionModel updateMission) throws MissionNotFoundException{
-        var exists = missionRepository.findById(id);
-        if (exists.isEmpty()){
-            throw new MissionNotFoundException("Mission with ID " + id + " not found");
-        }
-        MissionModel mission = exists.get();
-        mission.setName(updateMission.getName());
-        mission.setDescription(updateMission.getDescription());
+    public MissionModel update(Long id, MissionDto updateMissionDto) throws MissionNotFoundException, MissionRankNotFoundException{
+        MissionModel mission = missionRepository.findById(id)
+                .orElseThrow(()-> new MissionNotFoundException("Mission with ID " + id + " not found"));
 
+        mission.setName(updateMissionDto.name());
+        mission.setDescription(updateMissionDto.description());
+        try{
+            mission.setRank(MissionRank.valueOf(String.valueOf(updateMissionDto.rank())));
+        }catch (IllegalArgumentException e){
+            throw new MissionRankNotFoundException("Rank with name " + updateMissionDto.rank() + " not found");
+        }
         return  missionRepository.save(mission);
 
     }
 
     public void deleteById(Long id) throws MissionNotFoundException{
-        var exists = missionRepository.findById(id);
-        if (exists.isEmpty()){
-            throw new MissionNotFoundException("Mission with ID " + id + " not found");
-        }
-        missionRepository.delete(exists.get());
+        MissionModel mission = missionRepository.findById(id)
+                .orElseThrow(()->new MissionNotFoundException("Mission with ID " + id + " not found"));
+        missionRepository.delete(mission);
     }
 }
