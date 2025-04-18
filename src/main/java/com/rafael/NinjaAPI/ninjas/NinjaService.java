@@ -9,6 +9,7 @@ import com.rafael.NinjaAPI.ninjas.exceptions.NinjaRankNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NinjaService {
@@ -26,7 +27,7 @@ public class NinjaService {
     }
 
     public NinjaDto save(NinjaDto ninjaDto) throws MissionNotFoundException, EmailAlreadyExistsException, NinjaRankNotFoundException {
-        var exists = ninjaRepository.findByEmail(ninjaDto.getEmail());
+        Optional<NinjaModel> exists = ninjaRepository.findByEmail(ninjaDto.getEmail());
         if (exists.isPresent()){
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
@@ -48,8 +49,10 @@ public class NinjaService {
             throw new EmailAlreadyExistsException("there is already a ninja with this email");
         }
 
+        NinjaModel ninjaUpdate = ninjaMapper.map(updateNinjaDto);
+        ninjaUpdate.setId(id);
 
-        return ninjaMapper.map(ninjaRepository.save(ninjaMapper.map(updateNinjaDto)));
+        return ninjaMapper.map(ninjaRepository.save(ninjaUpdate));
     }
 
     public void delete(Long id){
