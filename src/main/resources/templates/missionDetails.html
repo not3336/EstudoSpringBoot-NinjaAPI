@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Missão</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 2rem;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .info {
+            margin-bottom: 2rem;
+        }
+
+        .info p {
+            margin: 8px 0;
+        }
+
+        .info strong {
+            display: inline-block;
+            width: 100px;
+            color: #555;
+        }
+
+        .img-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .img-container img {
+            max-width: 150px;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-button a {
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Detalhes da Missão</h2>
+
+    <div class="info">
+        <p><strong>ID:</strong> <span th:text="${mission.id}"></span></p>
+        <p><strong>Name:</strong> <span th:text="${mission.name}"></span></p>
+        <p><strong>Description:</strong> <span th:text="${mission.description}"></span></p>
+        <p><strong>Rank:</strong> <span th:text="${mission.rank}"></span></p>
+    </div>
+
+    <div class="back-button">
+        <a th:href="@{/missions/ui}">Voltar</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="pt-br">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Missions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        img {
+            max-width: 60px;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        div a {
+            margin-right: 8px;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        div a:nth-child(1) {
+            background-color: #3498db;
+        }
+
+        div a:nth-child(2) {
+            background-color: #f39c12;
+        }
+
+        div a:nth-child(3) {
+            background-color: #e74c3c;
+        }
+
+        div a:hover {
+            opacity: 0.8;
+        }
+
+        td:last-child {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Rank</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="m : ${missions}">
+                <td th:text="${m.id}"/>
+                <td th:text="${m.name}"/>
+                <td th:text="${m.description}"/>
+                <td th:text="${m.rank}"/>
+                <td>
+                    <div>
+                        <a th:href="@{/missions/ui/{id}(id=${m.id})}">Details</a>
+                        <a th:href="@{/missions/ui/update/{id}(id=${m.id})}">Change</a>
+                        <a th:href="@{/missions/ui/delete/{id}(id=${m.id})}">delete</a>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
